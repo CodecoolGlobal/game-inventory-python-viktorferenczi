@@ -1,4 +1,5 @@
-
+# This is the file where you must work. Write code in the functions, create new functions, 
+# so they work according to the specification
 
 # Displays the inventory.
 def display_inventory(inventory):

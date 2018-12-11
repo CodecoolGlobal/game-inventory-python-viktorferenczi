@@ -36,16 +36,17 @@ class GameInventoryTests(unittest.TestCase):
         })
 
     def test_export_inventory(self):
-        export_inventory({'dagger': 3, 'gold coin': 1, "battleaxe": 1},
-                         "test_inventory_export.csv")
+        _inventory = {'dagger': 1, 'gold coin': 1, "battleaxe": 2}
+        export_inventory(_inventory, "test_inventory_export.csv")
 
         with open("test_inventory_export.csv", newline='') as csvfile:
-            expected = ["dagger", "gold coin", "battleaxe", "dagger", "dagger"]
+            expected = ["dagger", "battleaxe", "gold coin", "battleaxe"]
             expected.sort()
             reader = csv.reader(csvfile, delimiter=',', quotechar='|')
             for row in reader:
                 row.sort()
                 self.assertListEqual(expected, row)
+            csvfile.close()
 
 
 def main():

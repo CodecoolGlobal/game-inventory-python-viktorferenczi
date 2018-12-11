@@ -46,7 +46,6 @@ class GameInventoryTests(unittest.TestCase):
             for row in reader:
                 row.sort()
                 self.assertListEqual(expected, row)
-            csvfile.close()
 
 
 def main():

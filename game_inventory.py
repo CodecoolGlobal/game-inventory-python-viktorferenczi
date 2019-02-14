@@ -5,7 +5,10 @@
 
 
 def display_inventory(inventory):
-    '''Display the inventory.'''
+    '''Display the inventory like this:
+    rope: 1
+    torch: 6
+    '''
     pass
 
 
@@ -17,7 +20,14 @@ def add_to_inventory(inventory, added_items):
 def print_table(inventory, order=None):
     '''
     Take your inventory and display it in a well-organized table with
-    each column right-justified.
+    each column right-justified like this:
+
+    -----------------
+    item name | count
+    -----------------
+         rope |     1
+        torch |     6
+    -----------------
 
     The 'order' parameter (string) works as follows:
     - None (by default) means the table is unordered

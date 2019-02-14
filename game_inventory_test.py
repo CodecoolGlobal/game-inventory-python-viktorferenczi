@@ -111,16 +111,43 @@ item name | count
             'gold coin': 1
         })
 
+    def test_import_inventory_catches_filenotfounderror(self):
+        _inventory = {'rope': 1, 'torch': 6}
+        expected_output = "File 'no_such_file.csv' not found!"
+        saved_stdout = sys.stdout
+
+        try:
+            mocked_stdout = StringIO()
+            sys.stdout = mocked_stdout
+            import_inventory(_inventory, "no_such_file.csv")
+            self.assertEqual(mocked_stdout.getvalue().strip(), expected_output)
+        finally:
+            sys.stdout = saved_stdout
+
     def test_export_inventory(self):
-        _inventory = {'dagger': 1, 'gold coin': 1, "battleaxe": 2}
-        export_inventory(_inventory, "test_inventory_export.csv")
+        export_inventory({'dagger': 3, 'gold coin': 1, "battleaxe": 1},
+                         "test_inventory_export.csv")
 
-        with open("test_inventory_export.csv") as csvfile:
-            contents = csvfile.read().strip()
+        with open("test_inventory_export.csv", newline='') as csvfile:
+            expected = ["dagger", "gold coin", "battleaxe", "dagger", "dagger"]
+            expected.sort()
+            reader = csv.reader(csvfile, delimiter=',', quotechar='|')
+            for row in reader:
+                row.sort()
+                self.assertListEqual(expected, row)
 
-        actual = sorted(contents.split(','))
-        expected = sorted(["dagger", "battleaxe", "gold coin", "battleaxe"])
-        self.assertListEqual(expected, actual)
+    def test_export_inventory_catches_permissionerror(self):
+        _inventory = {'rope': 1, 'torch': 6}
+        expected_output = "You don't have permission creating file '/nopermission.csv'!"
+        saved_stdout = sys.stdout
+
+        try:
+            mocked_stdout = StringIO()
+            sys.stdout = mocked_stdout
+            export_inventory(_inventory, "/nopermission.csv")
+            self.assertEqual(mocked_stdout.getvalue().strip(), expected_output)
+        finally:
+            sys.stdout = saved_stdout
 
 
 def main():

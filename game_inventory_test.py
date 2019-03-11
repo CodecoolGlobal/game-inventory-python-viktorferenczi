@@ -151,7 +151,7 @@ item name | count
 
 
 def main():
-    unittest.main()
+    unittest.main(verbosity=2)
 
 
 if __name__ == '__main__':

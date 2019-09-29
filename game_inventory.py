@@ -1,65 +1,80 @@
+inv = {"rope":1,"torch":6,"gold coin":42,"dagger":1,"arrow":12}
+dragon_loot = ["gold coin", "dagger", "gold coin", "gold coin", "ruby"]
 
-# This is the file where you must work.
-# Write code in the functions (and create new functions) so that they work
-# according to the specification.
+def display_inventory(inventory):                       #display the inventory normally
 
-
-def display_inventory(inventory):
-    '''Display the inventory like this:
-    rope: 1
-    torch: 6
-    '''
-    pass
+    for i in inventory:
+        print(i + ":" + " " +str(inventory[i]))
 
 
-def add_to_inventory(inventory, added_items):
-    '''Add to the inventory dictionary a list of items from added_items.'''
-    pass
+
+def add_to_inventory(inventory, added_items):           #add item to the inventory
+
+    for loot in dragon_loot:
+        if loot in inventory.keys():
+            inventory[loot] +=1
+        else:
+            inventory.update({loot:1})
 
 
-def print_table(inventory, order=None):
-    '''
-    Take your inventory and display it in a well-organized table with
-    each column right-justified like this:
 
-    -----------------
-    item name | count
-    -----------------
-         rope |     1
-        torch |     6
-    -----------------
+def print_table(inventory,order = None):                #display the inventory with style
 
-    The 'order' parameter (string) works as follows:
-    - None (by default) means the table is unordered
-    - "count,desc" means the table is ordered by count (of items in the
-      inventory) in descending order
-    - "count,asc" means the table is ordered by count in ascending order
-    '''
+    max = 0
+    for x in inventory:
+        for y in inventory:
+            if len(x) >= len(y):
+                if max <len(x):
+                    max = len(x)
+    line = "-" * (max+8)
+    space = " "
+    print(line + "\n" + space *(max-9) + "item name" + " | count\n" + line)
 
-    pass
+    if order == "count,desc":
+        sortedtuple_desc = sorted(inventory.items(), key=lambda x: x[1], reverse = True)
+        sorteddict_desc = dict(sortedtuple_desc)
+        for loot in sorteddict_desc:
+            space = " "
+            print(space * (max - len(loot)) + loot + " |" + space * (5 - len(str(inventory[loot]))) + str(inventory[loot]))
+    elif order == "count,asc":
+        sortedtuple_asc = sorted(inventory.items(), key=lambda x: x[1])
+        sorteddict_asc = dict(sortedtuple_asc)
+        for loot in sorteddict_asc:
+            space = " "
+            print(space * (max - len(loot)) + loot + " |" + space * (5 - len(str(inventory[loot]))) + str(inventory[loot]))
+    elif order is None:
+        for loot in inventory:
+            space = " "
+            print(space *(max - len(loot)) + loot + " |" + space *(5-len(str(inventory[loot]))) + str(inventory[loot]))
+    else:
+        exit()
+
+    print(line)
 
 
-def import_inventory(inventory, filename="import_inventory.csv"):
-    '''
-    Import new inventory items from a file.
+def import_inventory(inventory,filename = "test_inventory.csv"):          #import inventory from a file
 
-    The filename comes as an argument, but by default it's
-    "import_inventory.csv". The import automatically merges items by name.
+    file = open(filename,"r")
+    x = file.read()
+    separated = x.split(",")
+    for loot in separated:
+        if loot in inventory.keys():
+            inventory[loot] += 1
+        else:
+            inventory.update({loot: 1})
+    file.close()
 
-    The file format is plain text with comma separated values (CSV).
-    '''
-
-    pass
 
 
-def export_inventory(inventory, filename="export_inventory.csv"):
-    '''
-    Export the inventory into a .csv file.
+def export_inventory(inventory,filename = None):                            #export inventory into a file
 
-    If the filename argument is None, it creates and overwrites a file
-    called "export_inventory.csv".
-
-    The file format is plain text with comma separated values (CSV).
-    '''
-
-    pass
+    if filename is None:
+        file = open("export_inventory.csv", "w")
+        for item in inventory:
+            file.write(item+",")
+        file.close()
+    else:
+        file_chosen = open(filename, "w")
+        for item in inventory:
+            file_chosen.write(item+",")
+        file_chosen.close()
